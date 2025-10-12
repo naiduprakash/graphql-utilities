@@ -62,8 +62,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Extract the __schema object from the introspection result
+    // This matches the format returned by /api/schema
+    const schemaData = introspectionResult.data as any;
+    console.log('Parse Schema - introspectionResult.data keys:', Object.keys(schemaData || {}));
+    
+    if (!schemaData || !schemaData.__schema) {
+      console.error('Parse Schema - Missing __schema in introspection result');
+      return NextResponse.json(
+        { error: 'Invalid introspection result format' },
+        { status: 500 }
+      );
+    }
+
+    console.log('Parse Schema - __schema keys:', Object.keys(schemaData.__schema));
+    console.log('Parse Schema - types is array?', Array.isArray(schemaData.__schema.types));
+    console.log('Parse Schema - types length:', schemaData.__schema.types?.length);
+
     return NextResponse.json({
-      schema: introspectionResult.data,
+      schema: schemaData.__schema,
     });
   } catch (error) {
     console.error('Error parsing GraphQL schema:', error);

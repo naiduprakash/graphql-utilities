@@ -14,7 +14,7 @@ export default function QueryGenerationPage() {
 
   const tabs = [
     { id: 'config', label: 'Configuration', icon: Settings },
-    { id: 'results', label: 'Results', icon: FileText },
+    { id: 'results', label: 'Operations', icon: FileText },
   ] as const;
 
   const renderActivePanel = () => {
@@ -30,12 +30,12 @@ export default function QueryGenerationPage() {
 
   return (
     <MainLayout>
-      <div className="flex h-full">
+      <div className="flex h-full overflow-hidden">
         {/* Query Generation Sidebar */}
-        <aside className="bg-white border-r border-gray-200 flex-shrink-0 w-64">
-          <nav className="p-4 h-full">
+        <aside className="bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex-shrink-0 w-64 transition-colors">
+          <nav className="p-6 h-full">
             <div className="mb-6">
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                 Query Generation
               </h2>
             </div>
@@ -49,8 +49,8 @@ export default function QueryGenerationPage() {
                       className={cn(
                         'w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                         activeTab === tab.id
-                          ? 'bg-primary-100 text-primary-700'
-                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                          ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
+                          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
                       )}
                     >
                       <Icon className="h-5 w-5 flex-shrink-0" />
@@ -64,7 +64,7 @@ export default function QueryGenerationPage() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 overflow-hidden bg-gray-50 dark:bg-gray-950 transition-colors">
           {renderActivePanel()}
         </main>
       </div>

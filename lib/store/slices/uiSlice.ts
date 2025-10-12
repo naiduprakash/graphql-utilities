@@ -28,7 +28,7 @@ const initialState: UIState = {
   editorTheme: 'vs-dark',
   selectedOperation: null,
   selectedOperationType: null,
-  showInlineFragments: true,
+  showInlineFragments: false, // Default to "With Fragments"
   showJsonFormat: false,
   standaloneView: {
     isOpen: false,

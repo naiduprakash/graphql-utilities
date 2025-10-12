@@ -8,14 +8,14 @@ import { Zap, ArrowRight, Plus } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
       <Header />
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="py-8 px-6 max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             GraphQL Utilities
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             A comprehensive suite of tools to help you work with GraphQL schemas, queries, and operations.
           </p>
         </div>
@@ -24,14 +24,14 @@ export default function Home() {
           {/* Query Generation Card */}
           <Card className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start space-x-4">
-              <div className="p-3 rounded-lg bg-blue-500 text-white">
+              <div className="p-3 rounded-lg bg-primary-600 dark:bg-primary-500 text-white">
                 <Zap className="h-6 w-6" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
                   Query Generation
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
                   Generate GraphQL queries, mutations, and fragments from your schema
                 </p>
                 <Button
@@ -47,28 +47,28 @@ export default function Home() {
 
           {/* Skeleton Cards */}
           {[1, 2, 3, 4, 5].map((index) => (
-            <Card key={index} className="p-6 border-2 border-dashed border-gray-200">
+            <Card key={index} className="p-6 border-2 border-dashed border-gray-200 dark:border-gray-700">
               <div className="flex items-start space-x-4">
-                <div className="p-3 rounded-lg bg-gray-200 animate-pulse">
-                  <Plus className="h-6 w-6 text-gray-400" />
+                <div className="p-3 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse">
+                  <Plus className="h-6 w-6 text-gray-400 dark:text-gray-500" />
                 </div>
                 <div className="flex-1">
-                  <div className="h-6 bg-gray-200 rounded animate-pulse mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse mb-4 w-3/4"></div>
-                  <div className="h-8 bg-gray-200 rounded animate-pulse w-24"></div>
+                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4 w-3/4"></div>
+                  <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-24"></div>
                 </div>
               </div>
             </Card>
           ))}
         </div>
 
-        <div className="text-center">
-          <div className="bg-gray-50 rounded-lg p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+        <div className="text-center mt-12">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 shadow-sm transition-colors">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
               Ready to get started?
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Start with our Query Generation tool to create GraphQL operations from your schema.
             </p>
             <Button

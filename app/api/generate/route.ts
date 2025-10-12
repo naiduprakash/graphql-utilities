@@ -9,8 +9,17 @@ export async function POST(request: NextRequest) {
     const { schema, maxDepth } = await request.json();
 
     if (!schema) {
+      console.error('Generate API error: Schema is missing');
       return NextResponse.json(
         { error: 'Schema is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!schema.types || !Array.isArray(schema.types)) {
+      console.error('Generate API error: Invalid schema format. Schema keys:', Object.keys(schema));
+      return NextResponse.json(
+        { error: 'Invalid schema format: types array is missing. Please ensure the schema was parsed correctly.' },
         { status: 400 }
       );
     }
@@ -51,6 +60,9 @@ export async function POST(request: NextRequest) {
 
 // Simplified utility functions (adapted from the original codebase)
 function findTypeByName(schema: any, typeName: string) {
+  if (!schema.types || !Array.isArray(schema.types)) {
+    return null;
+  }
   return schema.types.find((t: any) => t.name === typeName);
 }
 
@@ -120,11 +132,13 @@ function generateFragments(schema: any, maxDepth: number) {
     return fragmentName;
   };
   
-  schema.types.forEach((type: any) => {
-    if (type.kind === "OBJECT" && type.fields && type.fields.length > 0) {
-      createFragment(type.name);
-    }
-  });
+  if (schema.types && Array.isArray(schema.types)) {
+    schema.types.forEach((type: any) => {
+      if (type.kind === "OBJECT" && type.fields && type.fields.length > 0) {
+        createFragment(type.name);
+      }
+    });
+  }
   
   return fragments;
 }

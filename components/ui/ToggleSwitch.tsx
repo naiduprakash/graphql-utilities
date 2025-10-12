@@ -18,30 +18,29 @@ export function ToggleSwitch({
   className 
 }: ToggleSwitchProps) {
   return (
-    <div className={cn('flex items-center', className)}>
+    <div className={cn('inline-flex items-center', className)}>
       <button
         onClick={onToggle}
-        className="relative inline-flex h-8 sm:h-9 items-center rounded-lg border border-gray-200 bg-gray-50 p-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 hover:bg-gray-100 min-w-fit"
-        style={{ minWidth: 'max-content' }}
+        className="relative inline-flex h-8 items-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 hover:border-gray-400 dark:hover:border-gray-500 shadow-sm flex-shrink-0"
+        type="button"
       >
-        {/* Background slider */}
+        {/* Background slider - positioned behind active option */}
         <div
           className={cn(
-            'absolute top-0.5 bottom-0.5 rounded-md bg-white shadow-sm border border-gray-200 transition-all duration-200 ease-in-out',
-            isRight ? 'translate-x-full' : 'translate-x-0'
+            'absolute top-0.5 bottom-0.5 left-0.5 rounded-md bg-primary-600 dark:bg-primary-500 shadow-sm transition-all duration-200 ease-in-out pointer-events-none'
           )}
-          style={{ 
-            width: 'calc(50% - 2px)',
-            left: '2px'
+          style={{
+            transform: isRight ? 'translateX(100%)' : 'translateX(0)',
+            width: isRight ? 'calc(50% - 2px)' : 'calc(50% - 2px)'
           }}
         />
 
         {/* Left option */}
-        <div className="relative z-10 flex items-center justify-center py-1 px-1 sm:px-2 min-w-0">
+        <div className="relative z-10 px-4 py-1">
           <span
             className={cn(
-              'text-xs font-medium transition-colors duration-200 whitespace-nowrap',
-              !isRight ? 'text-gray-900' : 'text-gray-500'
+              'text-xs font-semibold transition-colors duration-200 whitespace-nowrap',
+              !isRight ? 'text-white' : 'text-gray-600 dark:text-gray-400'
             )}
           >
             {leftLabel}
@@ -49,11 +48,11 @@ export function ToggleSwitch({
         </div>
 
         {/* Right option */}
-        <div className="relative z-10 flex items-center justify-center py-1 px-1 sm:px-2 min-w-0">
+        <div className="relative z-10 px-4 py-1">
           <span
             className={cn(
-              'text-xs font-medium transition-colors duration-200 whitespace-nowrap',
-              isRight ? 'text-gray-900' : 'text-gray-500'
+              'text-xs font-semibold transition-colors duration-200 whitespace-nowrap',
+              isRight ? 'text-white' : 'text-gray-600 dark:text-gray-400'
             )}
           >
             {rightLabel}

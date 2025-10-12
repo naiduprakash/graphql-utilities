@@ -22,31 +22,38 @@ export function ResultsPanel() {
 
   if (!operations.operations) {
     return (
-      <div className="max-w-6xl mx-auto">
-        <Card className="p-6">
-          <div className="text-center py-12">
-            <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Operations Available</h3>
-            <p className="text-gray-600">
-              Go to the Configuration tab to load existing operations or generate new ones.
-            </p>
-          </div>
-        </Card>
+      <div className="h-full flex items-center justify-center p-6">
+        <div className="max-w-md mx-auto">
+          <Card className="p-8">
+            <div className="text-center">
+              <FileText className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Operations Available</h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Go to the Configuration tab to load existing operations or generate new ones.
+              </p>
+            </div>
+          </Card>
+        </div>
       </div>
     );
   }
 
   if (!selectedOperation || !selectedOperationType) {
     return (
-      <div className="h-full flex">
-        <div className="w-80 border-r border-gray-200">
+      <div className="h-full flex overflow-hidden">
+        <ResizablePanel 
+          initialWidth={320}
+          minWidth={200}
+          maxWidth={500}
+          className="border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-colors"
+        >
           <OperationsSidebar />
-        </div>
-        <div className="flex-1 p-6">
-          <div className="text-center py-12">
-            <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Operation Selected</h3>
-            <p className="text-gray-600">
+        </ResizablePanel>
+        <div className="flex-1 flex items-center justify-center p-6">
+          <div className="text-center">
+            <FileText className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Operation Selected</h3>
+            <p className="text-gray-600 dark:text-gray-400">
               Select an operation from the sidebar to view its details.
             </p>
           </div>
@@ -81,16 +88,18 @@ export function ResultsPanel() {
   
   if (!operation) {
     return (
-      <div className="max-w-6xl mx-auto">
-        <Card className="p-6">
-          <div className="text-center py-12">
-            <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Operation Not Found</h3>
-            <p className="text-gray-600">
-              The selected operation could not be found.
-            </p>
-          </div>
-        </Card>
+      <div className="h-full flex items-center justify-center p-6">
+        <div className="max-w-md mx-auto">
+          <Card className="p-8">
+            <div className="text-center">
+              <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Operation Not Found</h3>
+              <p className="text-gray-600">
+                The selected operation could not be found.
+              </p>
+            </div>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -211,7 +220,7 @@ export function ResultsPanel() {
         initialWidth={320}
         minWidth={200}
         maxWidth={500}
-        className="border-r border-gray-200 bg-white"
+        className="border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-colors"
       >
         <OperationsSidebar />
       </ResizablePanel>
@@ -221,9 +230,9 @@ export function ResultsPanel() {
         {!selectedOperation ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Operation Selected</h3>
-              <p className="text-gray-600">
+              <FileText className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Operation Selected</h3>
+              <p className="text-gray-600 dark:text-gray-400">
                 Go to the Configuration tab to generate GraphQL operations, then select an operation from the sidebar to view its details.
               </p>
             </div>
@@ -231,7 +240,7 @@ export function ResultsPanel() {
         ) : (
           <>
             {/* Main Content - Editor takes full height */}
-            <div className="flex-1 p-2 sm:p-4 md:p-6 min-h-0 overflow-hidden">
+            <div className="flex-1 p-6 min-h-0 overflow-hidden">
               <MonacoEditor
                 value={getDisplayContent()}
                 language={getDisplayLanguage()}
@@ -240,11 +249,11 @@ export function ResultsPanel() {
                 showDownloadButton={true}
                 downloadFileName={selectedOperation === 'main-json' ? `graphql-operations-${new Date().toISOString().replace(/[:.]/g, '-')}` : selectedOperation}
                 topRightButtons={
-                  <div className="flex flex-wrap gap-1 sm:gap-2">
+                  <div className="flex flex-wrap gap-2 items-center">
                     {/* Fragment toggle - for queries, mutations, and main JSON */}
                     {selectedOperationType !== 'fragment' && (
                       <ToggleSwitch
-                        leftLabel="With Fragments"
+                        leftLabel="Fragments"
                         rightLabel="Inline"
                         isRight={showInlineFragments}
                         onToggle={() => dispatch(setShowInlineFragments(!showInlineFragments))}
@@ -254,8 +263,8 @@ export function ResultsPanel() {
                     {/* Format toggle - only for individual operations, not main JSON */}
                     {selectedOperation !== 'main-json' && (
                       <ToggleSwitch
-                        leftLabel="Query Format"
-                        rightLabel="JSON Format"
+                        leftLabel="GraphQL"
+                        rightLabel="JSON"
                         isRight={showJsonFormat}
                         onToggle={() => dispatch(setShowJsonFormat(!showJsonFormat))}
                       />

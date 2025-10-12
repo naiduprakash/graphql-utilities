@@ -6,6 +6,7 @@ export { Card } from './Card';
 export { Input } from './Input';
 export { MonacoEditor } from './MonacoEditor';
 export { ResizablePanel } from './ResizablePanel';
+export { LoadingSpinner } from './LoadingSpinner';
 export { Textarea } from './Textarea';
 export { ToggleSwitch } from './ToggleSwitch';
 

@@ -74,10 +74,10 @@ export function ResizablePanel({
       
       {/* Resize handle */}
       <div
-        className="absolute top-0 right-0 w-1 h-full bg-transparent hover:bg-blue-500 cursor-col-resize transition-colors group"
+        className="absolute top-0 right-0 w-1 h-full bg-transparent hover:bg-primary-500 dark:hover:bg-primary-400 cursor-col-resize transition-colors group"
         onMouseDown={handleMouseDown}
       >
-        <div className="absolute top-1/2 right-0 transform -translate-y-1/2 w-1 h-8 bg-gray-300 group-hover:bg-blue-500 rounded-full transition-colors" />
+        <div className="absolute top-1/2 right-0 transform -translate-y-1/2 w-1 h-8 bg-gray-300 dark:bg-gray-600 group-hover:bg-primary-500 dark:group-hover:bg-primary-400 rounded-full transition-colors" />
       </div>
     </div>
   );
