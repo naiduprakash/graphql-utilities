@@ -14,7 +14,7 @@ export interface ConfigState {
 
 const initialState: ConfigState = {
   inputMode: 'url',
-  graphqlEndpoint: 'https://devihgraphql.azurewebsites.net/api/PolicyGraphQL',
+  graphqlEndpoint: '',
   authToken: '',
   graphqlSchemaText: '',
   maxDepth: 50,
