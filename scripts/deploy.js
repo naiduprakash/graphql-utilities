@@ -257,7 +257,7 @@ function createDeploymentPackage() {
     try {
       // Use Node.js script to create cross-platform ZIP with Unix paths
       // This ensures the ZIP contains forward slashes even on Windows
-      execCommand(`node create-deployment-zip.js ${tempDir} ${zipFileName}`, 'Creating deployment package', false);
+      execCommand(`node scripts/create-deployment-zip.js ${tempDir} ${zipFileName}`, 'Creating deployment package', false);
       
       // Verify zip file was created
       if (fs.existsSync(zipFileName)) {

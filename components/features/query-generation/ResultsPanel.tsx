@@ -10,7 +10,7 @@ import { ResizablePanel } from '@/components/ui/ResizablePanel';
 import { OperationsSidebar } from './OperationsSidebar';
 import { formatJSON } from '@/lib/utils';
 import { FileText, Loader2 } from 'lucide-react';
-import { buildCompleteQueryWithFragments, buildCompleteQueryWithInlineFragments } from '@/lib/utils/build-complete-query';
+import { buildCompleteQueryWithFragments, buildCompleteQueryWithInlineFragments } from '@/lib/utils';
 
 export function ResultsPanel() {
   const dispatch = useAppDispatch();

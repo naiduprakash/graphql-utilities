@@ -1,8 +1,8 @@
 'use client';
 
 import { MainLayout } from '@/components/layout/MainLayout';
-import { ConfigPanel } from '@/components/panels/ConfigPanel';
-import { ResultsPanel } from '@/components/panels/ResultsPanel';
+import { ConfigPanel } from '@/components/features/query-generation/ConfigPanel';
+import { ResultsPanel } from '@/components/features/query-generation/ResultsPanel';
 import { useAppSelector, useAppDispatch } from '@/lib/hooks/redux';
 import { setActiveTab } from '@/lib/store/slices/uiSlice';
 import { Settings, FileText } from 'lucide-react';

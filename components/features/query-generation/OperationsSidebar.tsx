@@ -5,7 +5,7 @@ import { useAppSelector, useAppDispatch } from '@/lib/hooks/redux';
 import { setSelectedOperation, addNotification } from '@/lib/store/slices/uiSlice';
 import { Button } from '@/components/ui/Button';
 import { Zap, Loader2, Copy, Code, ChevronDown, ChevronRight, FileText } from 'lucide-react';
-import { buildCompleteQueryWithFragments, buildCompleteQueryWithInlineFragments } from '@/lib/utils/build-complete-query';
+import { buildCompleteQueryWithFragments, buildCompleteQueryWithInlineFragments } from '@/lib/utils';
 
 export function OperationsSidebar() {
   const dispatch = useAppDispatch();

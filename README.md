@@ -4,11 +4,13 @@ A Next.js application for GraphQL query generation, schema validation, and opera
 
 ## Features
 
-- GraphQL Query Generation from schemas
-- Schema Validation and Parsing
-- Monaco Editor Integration
-- Redux State Management
-- TypeScript Support
+- 🚀 GraphQL Query Generation from schemas
+- ✅ Schema Validation and Parsing
+- 📝 Monaco Editor Integration
+- 🔄 Redux State Management with Persistence
+- 💪 Full TypeScript Support
+- 🎨 Modern UI with Tailwind CSS
+- 📦 Optimized Production Builds
 
 ## Tech Stack
 
@@ -100,12 +102,22 @@ az webapp log tail --name YOUR_APP_NAME --resource-group YOUR_RESOURCE_GROUP
 ## Project Structure
 
 ```
-├── app/         # Next.js App Router pages & API routes
-├── components/  # React components
-├── lib/         # Utilities, hooks, Redux store
-├── public/      # Static assets
-└── deploy.js    # Azure deployment script
+├── app/                    # Next.js App Router pages & API routes
+├── components/             # React components
+│   ├── features/           # Feature-specific components
+│   ├── layout/             # Layout components
+│   └── ui/                 # Reusable UI components
+├── lib/                    # Shared utilities and logic
+│   ├── constants/          # App-wide constants
+│   ├── hooks/              # Custom React hooks
+│   ├── store/              # Redux store and slices
+│   ├── types/              # TypeScript type definitions
+│   └── utils/              # Utility functions
+├── public/                 # Static assets
+└── scripts/                # Build and deployment scripts
 ```
+
+For detailed architecture documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ## Configuration
 

@@ -1,6 +1,13 @@
-// Note: gql is not available in the browser environment
-// We'll use a simple string formatting approach instead
+/**
+ * GraphQL-specific utility functions
+ */
 
+/**
+ * Build complete query with fragment definitions appended
+ * @param queryString - The main query string
+ * @param fragments - Record of fragment definitions
+ * @returns Complete query string with fragments
+ */
 export function buildCompleteQueryWithFragments(
   queryString: string | undefined,
   fragments: Record<string, string> | undefined
@@ -40,6 +47,12 @@ export function buildCompleteQueryWithFragments(
   return completeQueryString;
 }
 
+/**
+ * Build complete query with fragments inlined (replacing fragment spreads with their content)
+ * @param queryString - The main query string
+ * @param fragments - Record of fragment definitions
+ * @returns Complete query string with inlined fragments
+ */
 export function buildCompleteQueryWithInlineFragments(
   queryString: string | undefined,
   fragments: Record<string, string> | undefined
@@ -55,7 +68,12 @@ export function buildCompleteQueryWithInlineFragments(
     return queryString;
   }
 
-  // Recursive function to resolve fragments
+  /**
+   * Recursive function to resolve fragments
+   * @param query - Query string to resolve
+   * @param maxDepth - Maximum recursion depth
+   * @returns Resolved query string
+   */
   function resolveFragmentsRecursively(query: string, maxDepth = 10): string {
     if (maxDepth <= 0) {
       console.warn('Maximum recursion depth reached while resolving fragments');
@@ -127,3 +145,113 @@ export function buildCompleteQueryWithInlineFragments(
   
   return resolveFragmentsRecursively(queryString);
 }
+
+/**
+ * Extract operation name from GraphQL query
+ * @param query - GraphQL query string
+ * @returns Operation name or null
+ */
+export function extractOperationName(query: string): string | null {
+  const match = query.match(/(?:query|mutation|subscription)\s+(\w+)/);
+  return match ? match[1] : null;
+}
+
+/**
+ * Extract operation type from GraphQL query
+ * @param query - GraphQL query string
+ * @returns Operation type (query, mutation, subscription) or null
+ */
+export function extractOperationType(query: string): 'query' | 'mutation' | 'subscription' | null {
+  const match = query.match(/^\s*(query|mutation|subscription)/);
+  return match ? (match[1] as 'query' | 'mutation' | 'subscription') : null;
+}
+
+/**
+ * Check if a string contains valid GraphQL syntax (basic check)
+ * @param str - String to check
+ * @returns True if appears to be valid GraphQL
+ */
+export function isValidGraphQL(str: string): boolean {
+  if (!str || typeof str !== 'string') return false;
+  
+  // Basic checks for GraphQL syntax
+  const hasOperation = /(?:query|mutation|subscription|fragment)\s+\w+/.test(str);
+  const hasBraces = str.includes('{') && str.includes('}');
+  
+  return hasOperation && hasBraces;
+}
+
+/**
+ * Format GraphQL query with proper indentation
+ * @param query - GraphQL query string
+ * @param indent - Number of spaces for indentation
+ * @returns Formatted query string
+ */
+export function formatGraphQLQuery(query: string, indent: number = 2): string {
+  if (!query) return '';
+  
+  let formatted = '';
+  let indentLevel = 0;
+  const lines = query.split('\n');
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    
+    // Decrease indent for closing braces
+    if (trimmed.startsWith('}')) {
+      indentLevel = Math.max(0, indentLevel - 1);
+    }
+    
+    // Add line with proper indentation
+    formatted += ' '.repeat(indentLevel * indent) + trimmed + '\n';
+    
+    // Increase indent for opening braces
+    if (trimmed.endsWith('{')) {
+      indentLevel++;
+    }
+  }
+  
+  return formatted.trim();
+}
+
+/**
+ * Count operations in a GraphQL operations object
+ * @param operations - GraphQL operations object
+ * @returns Count of each operation type
+ */
+export function countOperations(operations: {
+  queries?: Record<string, string>;
+  mutations?: Record<string, string>;
+  subscriptions?: Record<string, string>;
+  fragments?: Record<string, string>;
+}): {
+  queries: number;
+  mutations: number;
+  subscriptions: number;
+  fragments: number;
+  total: number;
+} {
+  const counts = {
+    queries: Object.keys(operations.queries || {}).length,
+    mutations: Object.keys(operations.mutations || {}).length,
+    subscriptions: Object.keys(operations.subscriptions || {}).length,
+    fragments: Object.keys(operations.fragments || {}).length,
+    total: 0,
+  };
+  
+  counts.total = counts.queries + counts.mutations + counts.subscriptions + counts.fragments;
+  
+  return counts;
+}
+
+/**
+ * Generate filename for GraphQL operations export
+ * @param prefix - Filename prefix
+ * @returns Generated filename
+ */
+export function generateOperationsFilename(prefix: string = 'graphql-operations'): string {
+  const timestamp = new Date().toISOString().split('T')[0];
+  return `${prefix}-${timestamp}.json`;
+}
+

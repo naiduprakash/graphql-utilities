@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable standalone output for Azure deployment
+  // Output configuration
   output: 'standalone',
   
   // Optimize for production
   swcMinify: true,
+  reactStrictMode: true,
   
   // Handle node modules that need to be polyfilled
   webpack: (config) => {
@@ -17,11 +18,11 @@ const nextConfig = {
     return config;
   },
   
-  // Headers for security
+  // Security headers
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/:path*',
         headers: [
           {
             key: 'X-Frame-Options',
@@ -35,10 +36,14 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
           },
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
         ],
       },
     ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

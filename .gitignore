@@ -50,9 +50,6 @@ deployment.zip
 temp_deploy/
 temp_zip_script.ps1
 
-# Docker
-.dockerignore
-
 # GraphQL operations files (generated)
 graphql-operations-*.json
 
