@@ -45,10 +45,10 @@ next-env.d.ts
 # OS
 Thumbs.db
 
-# Azure
+# Deployment artifacts
 deployment.zip
-deployment.tar.gz
-*.publish.xml
+temp_deploy/
+temp_zip_script.ps1
 
 # Docker
 .dockerignore

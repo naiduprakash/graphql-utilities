@@ -75,10 +75,10 @@ export function buildCompleteQueryWithInlineFragments(
     // Replace each fragment reference with the actual fragment content
     resolvedQuery = resolvedQuery.replace(fragmentRegex, (match, fragmentName) => {
       // Try exact match first
-      let fragmentContent = fragments[fragmentName];
+      let fragmentContent = fragments?.[fragmentName];
       
       // If not found, try case-insensitive match
-      if (!fragmentContent) {
+      if (!fragmentContent && fragments) {
         const lowerFragmentName = fragmentName.toLowerCase();
         const matchingKey = Object.keys(fragments).find(key => key.toLowerCase() === lowerFragmentName);
         if (matchingKey) {

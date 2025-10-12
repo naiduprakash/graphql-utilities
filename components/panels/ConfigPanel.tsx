@@ -309,7 +309,7 @@ export function ConfigPanel() {
               <div className="border border-gray-300 rounded-lg overflow-hidden">
                 <MonacoEditor
                   value={config.graphqlSchemaText}
-                  onChange={(value) => dispatch(setGraphqlSchemaText(value))}
+                  onChange={(value) => dispatch(setGraphqlSchemaText(value || ''))}
                   language="graphql"
                   height="500px"
                 />
