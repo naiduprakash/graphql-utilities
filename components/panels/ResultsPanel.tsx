@@ -99,37 +99,42 @@ export function ResultsPanel() {
     // Handle main JSON case
     if (selectedOperation === 'main-json') {
       if (operations.operations) {
-        // Create a deep copy to avoid read-only property issues
-        const processedOperations = {
-          fragments: { ...operations.operations.fragments },
-          queries: { ...operations.operations.queries },
-          mutations: { ...operations.operations.mutations },
-          subscriptions: { ...operations.operations.subscriptions }
-        };
+        const fragments = operations.operations?.fragments || {};
+        let queries = { ...operations.operations.queries };
+        let mutations = { ...operations.operations.mutations };
+        const subscriptions = { ...operations.operations.subscriptions };
         
         if (showInlineFragments) {
           // Inline mode: Replace fragment references with actual fields
-          Object.keys(processedOperations.queries || {}).forEach(key => {
-            processedOperations.queries[key] = buildCompleteQueryWithInlineFragments(
-              processedOperations.queries[key], 
-              operations.operations.fragments
+          Object.keys(queries || {}).forEach(key => {
+            queries[key] = buildCompleteQueryWithInlineFragments(
+              queries[key], 
+              fragments
             );
           });
-          Object.keys(processedOperations.mutations || {}).forEach(key => {
-            processedOperations.mutations[key] = buildCompleteQueryWithInlineFragments(
-              processedOperations.mutations[key], 
-              operations.operations.fragments
+          Object.keys(mutations || {}).forEach(key => {
+            mutations[key] = buildCompleteQueryWithInlineFragments(
+              mutations[key], 
+              fragments
             );
           });
-          // Remove fragments from the output since they're inlined
-          delete processedOperations.fragments;
+          // Create output without fragments since they're inlined
+          const processedOperations = {
+            queries,
+            mutations,
+            subscriptions
+          };
+          return JSON.stringify(processedOperations, null, 2);
         } else {
           // With Fragments mode: Keep original queries with fragment references
-          // Don't modify the queries - keep them as they are with ...FragmentName
-          // Fragments will be included in the fragments section
+          const processedOperations = {
+            fragments: { ...fragments },
+            queries,
+            mutations,
+            subscriptions
+          };
+          return JSON.stringify(processedOperations, null, 2);
         }
-        
-        return JSON.stringify(processedOperations, null, 2);
       }
       return operation; // Fallback
     }

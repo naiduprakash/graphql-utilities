@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable standalone output for Azure deployment
+  output: 'standalone',
+  
   // Optimize for production
   swcMinify: true,
   
@@ -12,11 +15,6 @@ const nextConfig = {
       tls: false,
     };
     return config;
-  },
-  
-  // Environment variables
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
   },
   
   // Headers for security
