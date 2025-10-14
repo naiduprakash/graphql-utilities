@@ -4,7 +4,7 @@ import { Header } from '@/components/layout/Header';
 import { NotificationContainer } from '@/components/layout/NotificationContainer';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Zap, ArrowRight, Plus } from 'lucide-react';
+import { Zap, ArrowRight, Plus, CheckCircle2 } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -45,8 +45,32 @@ export default function Home() {
             </div>
           </Card>
 
+          {/* Data Validation Card */}
+          <Card className="p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-start space-x-4">
+              <div className="p-3 rounded-lg bg-green-600 dark:bg-green-500 text-white">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  Data Validation
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  Validate JSON data against GraphQL schema to find missing keys and type errors
+                </p>
+                <Button
+                  onClick={() => window.location.href = '/data-validation'}
+                  className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
+                >
+                  <span>Get Started</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </Card>
+
           {/* Skeleton Cards */}
-          {[1, 2, 3, 4, 5].map((index) => (
+          {[1, 2, 3, 4].map((index) => (
             <Card key={index} className="p-6 border-2 border-dashed border-gray-200 dark:border-gray-700">
               <div className="flex items-start space-x-4">
                 <div className="p-3 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse">

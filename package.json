@@ -10,7 +10,9 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .next out",
-    "deploy": "node scripts/deploy.js"
+    "deploy": "node scripts/deploy.js",
+    "validate": "node scripts/validate-data.js",
+    "test:validation": "node scripts/test-validation.js"
   },
   "dependencies": {
     "@apollo/client": "^4.0.7",

@@ -1,0 +1,47 @@
+{
+  "id": "1",
+  "email": "john.doe@example.com",
+  "username": "johndoe",
+  "firstName": "John",
+  "lastName": "Doe",
+  "age": 30,
+  "isActive": true,
+  "role": "USER",
+  "profile": {
+    "bio": "Software developer and tech enthusiast",
+    "avatar": "https://example.com/avatar.jpg",
+    "website": "https://johndoe.com",
+    "location": {
+      "city": "San Francisco",
+      "country": "USA",
+      "coordinates": {
+        "lat": 37.7749,
+        "lng": -122.4194
+      }
+    }
+  },
+  "posts": [
+    {
+      "id": "101",
+      "title": "Getting Started with GraphQL",
+      "content": "GraphQL is a query language for APIs...",
+      "published": true,
+      "author": {
+        "id": "1",
+        "email": "john.doe@example.com",
+        "username": "johndoe",
+        "firstName": "John",
+        "lastName": "Doe",
+        "age": 30,
+        "isActive": true,
+        "role": "USER",
+        "posts": [],
+        "createdAt": "2023-01-01T00:00:00Z"
+      },
+      "tags": ["graphql", "api", "tutorial"],
+      "createdAt": "2023-06-15T10:30:00Z"
+    }
+  ],
+  "createdAt": "2023-01-01T00:00:00Z"
+}
+

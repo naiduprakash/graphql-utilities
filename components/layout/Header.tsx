@@ -41,9 +41,23 @@ export function Header() {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => window.location.href = '/'}
+          >
+            <span className="font-medium">Home</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => window.location.href = '/query-generation'}
           >
             <span className="font-medium">Query Generation</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => window.location.href = '/data-validation'}
+          >
+            <span className="font-medium">Data Validation</span>
           </Button>
           <Button
             variant="ghost"

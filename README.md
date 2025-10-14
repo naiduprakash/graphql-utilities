@@ -6,6 +6,7 @@ A Next.js application for GraphQL query generation, schema validation, and opera
 
 - 🚀 GraphQL Query Generation from schemas
 - ✅ Schema Validation and Parsing
+- 🔍 **JSON Data Validation against GraphQL Schema**
 - 📝 Monaco Editor Integration
 - 🔄 Redux State Management with Persistence
 - 💪 Full TypeScript Support
@@ -98,6 +99,8 @@ az webapp log tail --name YOUR_APP_NAME --resource-group YOUR_RESOURCE_GROUP
 | `npm run type-check` | Check TypeScript types |
 | `npm run deploy` | Deploy to Azure (with build) |
 | `npm run deploy -- --skip-build` | Deploy to Azure (skip build) |
+| `npm run validate` | Validate JSON data against schema |
+| `npm run test:validation` | Run validation tests |
 
 ## Project Structure
 
@@ -118,6 +121,55 @@ az webapp log tail --name YOUR_APP_NAME --resource-group YOUR_RESOURCE_GROUP
 ```
 
 For detailed architecture documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+
+## JSON Data Validation
+
+Validate your JSON data against GraphQL schemas to check for missing or incorrect fields!
+
+### 🎨 Web UI (New!)
+
+Access the beautiful web interface:
+
+```bash
+npm run dev
+```
+
+Then navigate to http://localhost:3000/data-validation
+
+**Features:**
+- 🖥️ Three-column layout with Monaco editors
+- 🔍 Live validation with instant results
+- 🎨 Dark mode support
+- 📊 Color-coded error reporting
+- ✨ Syntax highlighting and auto-completion
+
+### 💻 Command Line
+
+```bash
+# Run tests to verify it works
+npm run test:validation
+
+# Validate your data
+npm run validate <schema-file> <data-file> <type-name>
+
+# Example with provided samples
+npm run validate examples/example-schema.graphql examples/valid-user-data.json User
+```
+
+**Features:**
+- ✅ Detects missing required fields
+- ✅ Detects type mismatches  
+- ✅ Detects extra fields not in schema
+- ✅ Supports nested objects and arrays
+- ✅ Detailed error reporting
+
+### 📚 Documentation
+
+- [UI User Guide](./DATA_VALIDATION_UI_GUIDE.md) - Complete UI walkthrough
+- [Quick Start Guide](./QUICKSTART_VALIDATION.md) - Get started in 2 minutes
+- [Full API Documentation](./VALIDATION_GUIDE.md) - Complete guide with examples
+- [Examples](./examples/README.md) - Sample schemas and data
+- [Feature Summary](./FEATURE_SUMMARY.md) - Overview of all capabilities
 
 ## Configuration
 
