@@ -1112,7 +1112,7 @@ export function ValidationEditor() {
               Ready to Validate
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Enter your GraphQL schema and JSON data, then click "Validate Data" to check for missing keys, type errors, and more.
+              Enter your GraphQL schema and JSON data, then click &quot;Validate Data&quot; to check for missing keys, type errors, and more.
             </p>
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-left">
               <h4 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">What gets validated:</h4>
