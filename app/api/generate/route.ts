@@ -287,16 +287,25 @@ function buildOperationStringWithFragments(name: string, args: any[], type: stri
   return `${operationType} ${name}${argDefs ? `(${argDefs})` : ""} { ${name}${argUses ? `(${argUses})` : ""}${fieldSelection} }`;
 }
 
+function toCamelCase(str: string): string {
+  // Convert PascalCase or other formats to camelCase
+  return str.charAt(0).toLowerCase() + str.slice(1);
+}
+
 function buildArgumentDefinitions(args: any[]) {
   return args.map(arg => {
     const argType = resolveType(arg.type);
     const defaultValue = arg.defaultValue ? ` = ${arg.defaultValue}` : "";
-    return `$${arg.name}: ${argType}${defaultValue}`;
+    const variableName = toCamelCase(arg.name);
+    return `$${variableName}: ${argType}${defaultValue}`;
   }).join(", ");
 }
 
 function buildArgumentUsage(args: any[]) {
-  return args.map(arg => `${arg.name}: $${arg.name}`).join(", ");
+  return args.map(arg => {
+    const variableName = toCamelCase(arg.name);
+    return `${arg.name}: $${variableName}`;
+  }).join(", ");
 }
 
 function resolveType(type: any): string {
