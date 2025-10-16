@@ -1,7 +1,7 @@
 'use client';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks/redux';
-import { setShowInlineFragments, setShowJsonFormat, addNotification } from '@/lib/store/slices/uiSlice';
+import { setShowInlineFragments, setShowJsonFormat, setCombineQueriesAndMutations, addNotification } from '@/lib/store/slices/uiSlice';
 import { MonacoEditor } from '@/components/ui/MonacoEditor';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -19,6 +19,7 @@ export function ResultsPanel() {
   const selectedOperationType = useAppSelector((state) => state.ui.selectedOperationType);
   const showInlineFragments = useAppSelector((state) => state.ui.showInlineFragments);
   const showJsonFormat = useAppSelector((state) => state.ui.showJsonFormat);
+  const combineQueriesAndMutations = useAppSelector((state) => state.ui.combineQueriesAndMutations);
 
   if (!operations.operations) {
     return (
@@ -72,13 +73,13 @@ export function ResultsPanel() {
     
     switch (selectedOperationType) {
       case 'query':
-        return operations.operations.queries[selectedOperation];
+        return operations.operations.Queries[selectedOperation];
       case 'mutation':
-        return operations.operations.mutations[selectedOperation];
+        return operations.operations.Mutations[selectedOperation];
       case 'subscription':
-        return operations.operations.subscriptions[selectedOperation];
+        return operations.operations.Subscriptions[selectedOperation];
       case 'fragment':
-        return operations.operations.fragments[selectedOperation];
+        return operations.operations.Fragments[selectedOperation];
       default:
         return null;
     }
@@ -108,10 +109,10 @@ export function ResultsPanel() {
     // Handle main JSON case
     if (selectedOperation === 'main-json') {
       if (operations.operations) {
-        const fragments = operations.operations?.fragments || {};
-        let queries = { ...operations.operations.queries };
-        let mutations = { ...operations.operations.mutations };
-        const subscriptions = { ...operations.operations.subscriptions };
+        const fragments = operations.operations?.Fragments || {};
+        let queries = { ...operations.operations.Queries };
+        let mutations = { ...operations.operations.Mutations };
+        const subscriptions = { ...operations.operations.Subscriptions };
         
         if (showInlineFragments) {
           // Inline mode: Replace fragment references with actual fields
@@ -127,22 +128,60 @@ export function ResultsPanel() {
               fragments
             );
           });
-          // Create output without fragments since they're inlined
-          const processedOperations = {
-            queries,
-            mutations,
-            subscriptions
-          };
-          return JSON.stringify(processedOperations, null, 2);
+          
+          // Handle combine toggle
+          if (combineQueriesAndMutations) {
+            // Combine queries and mutations into single Queries object
+            const combinedQueries = { ...queries, ...mutations };
+            const processedOperations: any = {
+              Queries: combinedQueries
+            };
+            if (Object.keys(subscriptions).length > 0) {
+              processedOperations.Subscriptions = subscriptions;
+            }
+            return JSON.stringify(processedOperations, null, 2);
+          } else {
+            // Create output without fragments since they're inlined
+            const processedOperations: any = {};
+            if (Object.keys(queries).length > 0) {
+              processedOperations.Queries = queries;
+            }
+            if (Object.keys(mutations).length > 0) {
+              processedOperations.Mutations = mutations;
+            }
+            if (Object.keys(subscriptions).length > 0) {
+              processedOperations.Subscriptions = subscriptions;
+            }
+            return JSON.stringify(processedOperations, null, 2);
+          }
         } else {
           // With Fragments mode: Keep original queries with fragment references
-          const processedOperations = {
-            fragments: { ...fragments },
-            queries,
-            mutations,
-            subscriptions
-          };
-          return JSON.stringify(processedOperations, null, 2);
+          if (combineQueriesAndMutations) {
+            // Combine queries and mutations into single Queries object
+            const combinedQueries = { ...queries, ...mutations };
+            const processedOperations: any = {
+              Fragments: { ...fragments },
+              Queries: combinedQueries
+            };
+            if (Object.keys(subscriptions).length > 0) {
+              processedOperations.Subscriptions = subscriptions;
+            }
+            return JSON.stringify(processedOperations, null, 2);
+          } else {
+            const processedOperations: any = {
+              Fragments: { ...fragments }
+            };
+            if (Object.keys(queries).length > 0) {
+              processedOperations.Queries = queries;
+            }
+            if (Object.keys(mutations).length > 0) {
+              processedOperations.Mutations = mutations;
+            }
+            if (Object.keys(subscriptions).length > 0) {
+              processedOperations.Subscriptions = subscriptions;
+            }
+            return JSON.stringify(processedOperations, null, 2);
+          }
         }
       }
       return operation; // Fallback
@@ -154,9 +193,9 @@ export function ResultsPanel() {
     
     if (operations.operations) {
       if (showInlineFragments) {
-        return buildCompleteQueryWithInlineFragments(operation, operations.operations.fragments);
+        return buildCompleteQueryWithInlineFragments(operation, operations.operations.Fragments);
       } else {
-        return buildCompleteQueryWithFragments(operation, operations.operations.fragments);
+        return buildCompleteQueryWithFragments(operation, operations.operations.Fragments);
       }
     }
     
@@ -250,6 +289,16 @@ export function ResultsPanel() {
                 downloadFileName={selectedOperation === 'main-json' ? `graphql-operations-${new Date().toISOString().replace(/[:.]/g, '-')}` : selectedOperation}
                 topRightButtons={
                   <div className="flex flex-wrap gap-2 items-center">
+                    {/* Combine toggle - only for main JSON */}
+                    {selectedOperation === 'main-json' && (
+                      <ToggleSwitch
+                        leftLabel="Separate"
+                        rightLabel="Combine"
+                        isRight={combineQueriesAndMutations}
+                        onToggle={() => dispatch(setCombineQueriesAndMutations(!combineQueriesAndMutations))}
+                      />
+                    )}
+                    
                     {/* Fragment toggle - for queries, mutations, and main JSON */}
                     {selectedOperationType !== 'fragment' && (
                       <ToggleSwitch

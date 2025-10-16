@@ -221,10 +221,10 @@ export function formatGraphQLQuery(query: string, indent: number = 2): string {
  * @returns Count of each operation type
  */
 export function countOperations(operations: {
-  queries?: Record<string, string>;
-  mutations?: Record<string, string>;
-  subscriptions?: Record<string, string>;
-  fragments?: Record<string, string>;
+  Queries?: Record<string, string>;
+  Mutations?: Record<string, string>;
+  Subscriptions?: Record<string, string>;
+  Fragments?: Record<string, string>;
 }): {
   queries: number;
   mutations: number;
@@ -233,10 +233,10 @@ export function countOperations(operations: {
   total: number;
 } {
   const counts = {
-    queries: Object.keys(operations.queries || {}).length,
-    mutations: Object.keys(operations.mutations || {}).length,
-    subscriptions: Object.keys(operations.subscriptions || {}).length,
-    fragments: Object.keys(operations.fragments || {}).length,
+    queries: Object.keys(operations.Queries || {}).length,
+    mutations: Object.keys(operations.Mutations || {}).length,
+    subscriptions: Object.keys(operations.Subscriptions || {}).length,
+    fragments: Object.keys(operations.Fragments || {}).length,
     total: 0,
   };
   

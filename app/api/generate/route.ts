@@ -38,10 +38,10 @@ export async function POST(request: NextRequest) {
     
     // Generate operations
     const result = {
-      fragments: fragments,
-      queries: {},
-      mutations: {},
-      subscriptions: {}
+      Fragments: fragments,
+      Queries: {},
+      Mutations: {},
+      Subscriptions: {}
     };
 
     // Find operation types
@@ -50,12 +50,27 @@ export async function POST(request: NextRequest) {
     const subscriptionType = schema.subscriptionType ? findTypeByName(schema, schema.subscriptionType.name) : null;
 
     // Process each operation type
-    result.queries = processOperationFieldsWithFragments(queryType?.fields, "query", schema, maxDepth || 50, fragments);
-    result.mutations = processOperationFieldsWithFragments(mutationType?.fields, "mutation", schema, maxDepth || 50, fragments);
-    result.subscriptions = processOperationFieldsWithFragments(subscriptionType?.fields, "subscription", schema, maxDepth || 50, fragments);
+    result.Queries = processOperationFieldsWithFragments(queryType?.fields, "query", schema, maxDepth || 50, fragments);
+    result.Mutations = processOperationFieldsWithFragments(mutationType?.fields, "mutation", schema, maxDepth || 50, fragments);
+    result.Subscriptions = processOperationFieldsWithFragments(subscriptionType?.fields, "subscription", schema, maxDepth || 50, fragments);
+
+    // Remove empty objects
+    const cleanedResult: any = {};
+    if (Object.keys(result.Fragments).length > 0) {
+      cleanedResult.Fragments = result.Fragments;
+    }
+    if (Object.keys(result.Queries).length > 0) {
+      cleanedResult.Queries = result.Queries;
+    }
+    if (Object.keys(result.Mutations).length > 0) {
+      cleanedResult.Mutations = result.Mutations;
+    }
+    if (Object.keys(result.Subscriptions).length > 0) {
+      cleanedResult.Subscriptions = result.Subscriptions;
+    }
 
     return NextResponse.json({
-      operations: result,
+      operations: cleanedResult,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

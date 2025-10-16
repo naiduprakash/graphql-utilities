@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface OperationsState {
   operations: {
-    fragments: Record<string, string>;
-    queries: Record<string, string>;
-    mutations: Record<string, string>;
-    subscriptions: Record<string, string>;
+    Fragments?: Record<string, string>;
+    Queries?: Record<string, string>;
+    Mutations?: Record<string, string>;
+    Subscriptions?: Record<string, string>;
   } | null;
   isLoading: boolean;
   error: string | null;
@@ -37,10 +37,10 @@ const operationsSlice = createSlice({
       
       if (action.payload) {
         state.statistics = {
-          queryCount: Object.keys(action.payload.queries).length,
-          mutationCount: Object.keys(action.payload.mutations).length,
-          subscriptionCount: Object.keys(action.payload.subscriptions).length,
-          fragmentCount: Object.keys(action.payload.fragments).length,
+          queryCount: Object.keys(action.payload.Queries || {}).length,
+          mutationCount: Object.keys(action.payload.Mutations || {}).length,
+          subscriptionCount: Object.keys(action.payload.Subscriptions || {}).length,
+          fragmentCount: Object.keys(action.payload.Fragments || {}).length,
         };
       }
     },

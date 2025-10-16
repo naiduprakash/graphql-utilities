@@ -8,6 +8,7 @@ export interface UIState {
   selectedOperationType: 'query' | 'mutation' | 'subscription' | 'fragment' | null;
   showInlineFragments: boolean;
   showJsonFormat: boolean;
+  combineQueriesAndMutations: boolean;
   standaloneView: {
     isOpen: boolean;
     operation: string | null;
@@ -30,6 +31,7 @@ const initialState: UIState = {
   selectedOperationType: null,
   showInlineFragments: false, // Default to "With Fragments"
   showJsonFormat: false,
+  combineQueriesAndMutations: false,
   standaloneView: {
     isOpen: false,
     operation: null,
@@ -62,6 +64,9 @@ const uiSlice = createSlice({
     setShowJsonFormat: (state, action: PayloadAction<boolean>) => {
       state.showJsonFormat = action.payload;
     },
+    setCombineQueriesAndMutations: (state, action: PayloadAction<boolean>) => {
+      state.combineQueriesAndMutations = action.payload;
+    },
     addNotification: (state, action: PayloadAction<Omit<UIState['notifications'][0], 'id' | 'timestamp'>>) => {
       const notification = {
         ...action.payload,
@@ -86,6 +91,7 @@ export const {
   setSelectedOperation,
   setShowInlineFragments,
   setShowJsonFormat,
+  setCombineQueriesAndMutations,
   addNotification,
   removeNotification,
   clearNotifications,

@@ -11,6 +11,7 @@ export function OperationsSidebar() {
   const operations = useAppSelector((state) => state.operations);
   const selectedOperation = useAppSelector((state) => state.ui.selectedOperation);
   const selectedOperationType = useAppSelector((state) => state.ui.selectedOperationType);
+  const combineQueriesAndMutations = useAppSelector((state) => state.ui.combineQueriesAndMutations);
   
   // State for collapsible groups
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
@@ -55,9 +56,14 @@ export function OperationsSidebar() {
     dispatch(setSelectedOperation({ name: 'main-json', type: 'query' }));
   };
 
-  const getOperationType = (tab: string): 'query' | 'mutation' | 'subscription' | 'fragment' => {
+  const getOperationType = (tab: string, operationName: string): 'query' | 'mutation' | 'subscription' | 'fragment' => {
     switch (tab) {
       case 'queries':
+        if (combineQueriesAndMutations) {
+          // In combined mode, check if the operation is actually a mutation
+          const isMutation = operations.operations?.Mutations && operations.operations.Mutations[operationName];
+          return isMutation ? 'mutation' : 'query';
+        }
         return 'query';
       case 'mutations':
         return 'mutation';
@@ -70,7 +76,11 @@ export function OperationsSidebar() {
     }
   };
 
-  const tabs = [
+  const tabs = combineQueriesAndMutations ? [
+    { id: 'all', label: 'All Operations', count: (operations.statistics?.queryCount || 0) + (operations.statistics?.mutationCount || 0), clickable: true },
+    { id: 'queries', label: 'Queries', count: (operations.statistics?.queryCount || 0) + (operations.statistics?.mutationCount || 0), clickable: false },
+    { id: 'fragments', label: 'Fragments', count: operations.statistics?.fragmentCount || 0, clickable: false },
+  ] as const : [
     { id: 'all', label: 'All Operations', count: (operations.statistics?.queryCount || 0) + (operations.statistics?.mutationCount || 0), clickable: true },
     { id: 'queries', label: 'Queries', count: operations.statistics?.queryCount || 0, clickable: false },
     { id: 'mutations', label: 'Mutations', count: operations.statistics?.mutationCount || 0, clickable: false },
@@ -81,15 +91,22 @@ export function OperationsSidebar() {
     switch (tabId) {
       case 'all':
         return {
-          ...operations.operations?.queries || {},
-          ...operations.operations?.mutations || {},
+          ...operations.operations?.Queries || {},
+          ...operations.operations?.Mutations || {},
         };
       case 'queries':
-        return operations.operations?.queries || {};
+        if (combineQueriesAndMutations) {
+          // In combined mode, show both queries and mutations under queries
+          return {
+            ...operations.operations?.Queries || {},
+            ...operations.operations?.Mutations || {},
+          };
+        }
+        return operations.operations?.Queries || {};
       case 'mutations':
-        return operations.operations?.mutations || {};
+        return operations.operations?.Mutations || {};
       case 'fragments':
-        return operations.operations?.fragments || {};
+        return operations.operations?.Fragments || {};
       default:
         return {};
     }
@@ -149,9 +166,9 @@ export function OperationsSidebar() {
                   {Object.entries(currentOperations).map(([name, operation]) => (
                     <div key={name}>
                       <button
-                        onClick={() => handleViewOperation(name, getOperationType(tab.id))}
+                        onClick={() => handleViewOperation(name, getOperationType(tab.id, name))}
                         className={`w-full text-left text-sm font-medium truncate p-2 rounded-md transition-colors ${
-                          selectedOperation === name && selectedOperationType === getOperationType(tab.id)
+                          selectedOperation === name && selectedOperationType === getOperationType(tab.id, name)
                             ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
                             : 'text-gray-900 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400'
                         }`}

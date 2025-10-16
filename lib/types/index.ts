@@ -1,10 +1,10 @@
 // Common types used across the application
 
 export interface GraphQLOperations {
-  fragments: Record<string, string>;
-  queries: Record<string, string>;
-  mutations: Record<string, string>;
-  subscriptions: Record<string, string>;
+  Fragments?: Record<string, string>;
+  Queries?: Record<string, string>;
+  Mutations?: Record<string, string>;
+  Subscriptions?: Record<string, string>;
 }
 
 export interface OperationStatistics {
