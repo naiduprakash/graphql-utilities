@@ -73,13 +73,13 @@ export function ResultsPanel() {
     
     switch (selectedOperationType) {
       case 'query':
-        return operations.operations.Queries[selectedOperation];
+        return operations.operations.Queries?.[selectedOperation];
       case 'mutation':
-        return operations.operations.Mutations[selectedOperation];
+        return operations.operations.Mutations?.[selectedOperation];
       case 'subscription':
-        return operations.operations.Subscriptions[selectedOperation];
+        return operations.operations.Subscriptions?.[selectedOperation];
       case 'fragment':
-        return operations.operations.Fragments[selectedOperation];
+        return operations.operations.Fragments?.[selectedOperation];
       default:
         return null;
     }
@@ -105,14 +105,23 @@ export function ResultsPanel() {
     );
   }
 
+  // Helper function to sort operations alphabetically
+  const sortOperations = (operationsObj: any) => {
+    const sorted: any = {};
+    Object.keys(operationsObj).sort().forEach(key => {
+      sorted[key] = operationsObj[key];
+    });
+    return sorted;
+  };
+
   const getCompleteQuery = () => {
     // Handle main JSON case
     if (selectedOperation === 'main-json') {
       if (operations.operations) {
-        const fragments = operations.operations?.Fragments || {};
-        let queries = { ...operations.operations.Queries };
-        let mutations = { ...operations.operations.Mutations };
-        const subscriptions = { ...operations.operations.Subscriptions };
+        const fragments = sortOperations(operations.operations?.Fragments || {});
+        let queries = sortOperations({ ...operations.operations.Queries });
+        let mutations = sortOperations({ ...operations.operations.Mutations });
+        const subscriptions = sortOperations({ ...operations.operations.Subscriptions });
         
         if (showInlineFragments) {
           // Inline mode: Replace fragment references with actual fields
@@ -132,17 +141,23 @@ export function ResultsPanel() {
           // Handle combine toggle
           if (combineQueriesAndMutations) {
             // Combine queries and mutations into single Queries object
-            const combinedQueries = { ...queries, ...mutations };
-            const processedOperations: any = {
-              Queries: combinedQueries
-            };
+            const combinedQueries = sortOperations({ ...queries, ...mutations });
+            const processedOperations: any = {};
+            
+            // Add sections in order: Queries, Fragments, Subscriptions (only if not empty)
+            if (Object.keys(combinedQueries).length > 0) {
+              processedOperations.Queries = combinedQueries;
+            }
             if (Object.keys(subscriptions).length > 0) {
               processedOperations.Subscriptions = subscriptions;
             }
+            
             return JSON.stringify(processedOperations, null, 2);
           } else {
             // Create output without fragments since they're inlined
             const processedOperations: any = {};
+            
+            // Add sections in order: Queries, Mutations, Subscriptions (only if not empty)
             if (Object.keys(queries).length > 0) {
               processedOperations.Queries = queries;
             }
@@ -152,34 +167,45 @@ export function ResultsPanel() {
             if (Object.keys(subscriptions).length > 0) {
               processedOperations.Subscriptions = subscriptions;
             }
+            
             return JSON.stringify(processedOperations, null, 2);
           }
         } else {
           // With Fragments mode: Keep original queries with fragment references
           if (combineQueriesAndMutations) {
             // Combine queries and mutations into single Queries object
-            const combinedQueries = { ...queries, ...mutations };
-            const processedOperations: any = {
-              Fragments: { ...fragments },
-              Queries: combinedQueries
-            };
+            const combinedQueries = sortOperations({ ...queries, ...mutations });
+            const processedOperations: any = {};
+            
+            // Add sections in order: Queries, Fragments, Subscriptions (only if not empty)
+            if (Object.keys(combinedQueries).length > 0) {
+              processedOperations.Queries = combinedQueries;
+            }
+            if (Object.keys(fragments).length > 0) {
+              processedOperations.Fragments = { ...fragments };
+            }
             if (Object.keys(subscriptions).length > 0) {
               processedOperations.Subscriptions = subscriptions;
             }
+            
             return JSON.stringify(processedOperations, null, 2);
           } else {
-            const processedOperations: any = {
-              Fragments: { ...fragments }
-            };
+            const processedOperations: any = {};
+            
+            // Add sections in order: Queries, Mutations, Fragments, Subscriptions (only if not empty)
             if (Object.keys(queries).length > 0) {
               processedOperations.Queries = queries;
             }
             if (Object.keys(mutations).length > 0) {
               processedOperations.Mutations = mutations;
             }
+            if (Object.keys(fragments).length > 0) {
+              processedOperations.Fragments = { ...fragments };
+            }
             if (Object.keys(subscriptions).length > 0) {
               processedOperations.Subscriptions = subscriptions;
             }
+            
             return JSON.stringify(processedOperations, null, 2);
           }
         }

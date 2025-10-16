@@ -11,7 +11,6 @@ export function OperationsSidebar() {
   const operations = useAppSelector((state) => state.operations);
   const selectedOperation = useAppSelector((state) => state.ui.selectedOperation);
   const selectedOperationType = useAppSelector((state) => state.ui.selectedOperationType);
-  const combineQueriesAndMutations = useAppSelector((state) => state.ui.combineQueriesAndMutations);
   
   // State for collapsible groups
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
@@ -59,11 +58,6 @@ export function OperationsSidebar() {
   const getOperationType = (tab: string, operationName: string): 'query' | 'mutation' | 'subscription' | 'fragment' => {
     switch (tab) {
       case 'queries':
-        if (combineQueriesAndMutations) {
-          // In combined mode, check if the operation is actually a mutation
-          const isMutation = operations.operations?.Mutations && operations.operations.Mutations[operationName];
-          return isMutation ? 'mutation' : 'query';
-        }
         return 'query';
       case 'mutations':
         return 'mutation';
@@ -76,11 +70,7 @@ export function OperationsSidebar() {
     }
   };
 
-  const tabs = combineQueriesAndMutations ? [
-    { id: 'all', label: 'All Operations', count: (operations.statistics?.queryCount || 0) + (operations.statistics?.mutationCount || 0), clickable: true },
-    { id: 'queries', label: 'Queries', count: (operations.statistics?.queryCount || 0) + (operations.statistics?.mutationCount || 0), clickable: false },
-    { id: 'fragments', label: 'Fragments', count: operations.statistics?.fragmentCount || 0, clickable: false },
-  ] as const : [
+  const tabs = [
     { id: 'all', label: 'All Operations', count: (operations.statistics?.queryCount || 0) + (operations.statistics?.mutationCount || 0), clickable: true },
     { id: 'queries', label: 'Queries', count: operations.statistics?.queryCount || 0, clickable: false },
     { id: 'mutations', label: 'Mutations', count: operations.statistics?.mutationCount || 0, clickable: false },
@@ -95,13 +85,6 @@ export function OperationsSidebar() {
           ...operations.operations?.Mutations || {},
         };
       case 'queries':
-        if (combineQueriesAndMutations) {
-          // In combined mode, show both queries and mutations under queries
-          return {
-            ...operations.operations?.Queries || {},
-            ...operations.operations?.Mutations || {},
-          };
-        }
         return operations.operations?.Queries || {};
       case 'mutations':
         return operations.operations?.Mutations || {};
